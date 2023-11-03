@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>184165770817-ub82f2r01u78damkfvsmnkhj9fc5jsi6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.184165770817-ub82f2r01u78damkfvsmnkhj9fc5jsi6</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>184165770817-nj2s7grt3u6e14gm0gvuvo5dbtc5tli2.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDJ3mn8mX6NLLvcAqo7oOuvQrrsN_DkwEM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>184165770817</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>mansur.nadim.maan.maanecommerceui</string>
+	<key>PROJECT_ID</key>
+	<string>maanecommercemansur</string>
+	<key>STORAGE_BUCKET</key>
+	<string>maanecommercemansur.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:184165770817:ios:4d1f723b900bb31f1b48c0</string>
+</dict>
+</plist>
