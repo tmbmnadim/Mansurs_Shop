@@ -251,7 +251,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                       emailController.clear();
                       passwordController.clear();
-                      if (context.mounted) {
+                      if (context.mounted && (FirebaseAuth.instance.currentUser?.uid!=null)) {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

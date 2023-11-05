@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:maanecommerceui/auth.dart';
 import 'package:maanecommerceui/custom_widgets/my_widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -41,20 +42,30 @@ class _UserDetailsInputState extends State<UserDetailsInput> {
   @override
   void initState() {
     super.initState();
-    Provider.of<UserProfileProvider>(context, listen: false).updateUserData();
-    UserModel user = Provider.of<UserProfileProvider>(context, listen: false).user;
+    UserProfileProvider provider =
+        Provider.of<UserProfileProvider>(context, listen: false);
+    if (!(Provider.of<UserProfileProvider>(context, listen: false).firstLoad)) {
+      UserModel user =
+          Provider.of<UserProfileProvider>(context, listen: false).user;
 
-    networkImage = user.image;
-    fullNameController.text = widget.fullName ?? user.fullName ?? "";
-    emailController.text = (user.email ?? _user?.email)!;
-    addressController.text = user.address ?? "";
-    selectedCode = (user.mobileNumber ?? "+880~").split("~")[0];
-    mobileNumberController.text = (user.mobileNumber ?? "+880~").split("~")[1];
-    landMarkController.text = user.landMark ?? "";
-    provinceController.text = user.province ?? "";
-    cityController.text = user.city ?? "";
-    areaController.text = user.area ?? "";
-    homeOrOfficeVar = user.homeOrOffice ?? "";
+      networkImage = user.image;
+      fullNameController.text = user.fullName ?? "";
+      emailController.text = user.email ?? "";
+      addressController.text = user.address ?? "";
+      selectedCode = (user.mobileNumber ?? "+880~").split("~")[0];
+      mobileNumberController.text =
+          (user.mobileNumber ?? "+880~").split("~")[1];
+      landMarkController.text = user.landMark ?? "";
+      provinceController.text = user.province ?? "";
+      cityController.text = user.city ?? "";
+      areaController.text = user.area ?? "";
+      homeOrOfficeVar = user.homeOrOffice ?? "";
+    } else {
+      Provider.of<UserProfileProvider>(context, listen: false).firstLoad =
+          false;
+      fullNameController.text = widget.fullName ?? "";
+      emailController.text = _user?.email ?? "";
+    }
   }
 
   @override
@@ -84,83 +95,6 @@ class _UserDetailsInputState extends State<UserDetailsInput> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: utilManager.customTextButton(
-          buttonText: "Save Data",
-          fontSize: 20,
-          height: 50,
-          width: screenSize.width,
-          textColor: Colors.white,
-          splashColor: Colors.white,
-          color: _user != null
-              ? const Color.fromARGB(255, 50, 194, 122)
-              : Colors.black26,
-          borderRadius: 80,
-          onTap: _user != null
-              ? () async {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    try {
-                      final String? downloadUrl;
-                      if (selectedImageFile != null) {
-                        Reference storage = FirebaseStorage.instance.ref();
-                        var uploadTask = storage
-                            .child(_user!.uid)
-                            .putFile(selectedImageFile!);
-                        final snapshot = await uploadTask.whenComplete(() {});
-                        downloadUrl = await snapshot.ref.getDownloadURL();
-                      } else {
-                        downloadUrl = "";
-                      }
-                      EasyLoading.showSuccess('Signed up');
-                      UserModel data = UserModel(
-                        image: downloadUrl.isEmpty
-                            ? (networkImage ?? "").isEmpty
-                                ? ""
-                                : networkImage
-                            : downloadUrl,
-                        fullName: fullNameController.text,
-                        email: emailController.text,
-                        address: addressController.text,
-                        mobileNumber:
-                            ("$selectedCode~${mobileNumberController.text}"),
-                        landMark: landMarkController.text,
-                        province: provinceController.text,
-                        city: cityController.text,
-                        area: areaController.text,
-                        homeOrOffice: homeOrOfficeVar,
-                      );
-                      postUserData(userModel: data);
-
-                      if (context.mounted) {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Homepage(),
-                            ),
-                            ModalRoute.withName('/'));
-                      }
-                    } on FirebaseAuthException catch (error) {
-                      if (error.code == 'weak-password') {
-                        EasyLoading.showError(
-                            'The password provided is too weak.');
-                      } else if (error.code == 'email-already-in-use') {
-                        EasyLoading.showError(
-                            'A account already exists for that email.');
-                      }
-                    } catch (e) {
-                      EasyLoading.showError(e.toString());
-                    }
-                  }
-                }
-              : () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                  }
-                },
-        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -340,6 +274,73 @@ class _UserDetailsInputState extends State<UserDetailsInput> {
           ),
           const SizedBox(height: 10),
           homeOrOffice(width: screenSize.width),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: utilManager.customTextButton(
+              buttonText: "Save Data",
+              fontSize: 20,
+              height: 50,
+              width: screenSize.width,
+              textColor: Colors.white,
+              splashColor: Colors.white,
+              color: _user != null
+                  ? const Color.fromARGB(255, 50, 194, 122)
+                  : Colors.black26,
+              borderRadius: 80,
+              onTap: _user != null
+                  ? () async {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  try {
+                    String downloadUrl = "";
+                    if (selectedImageFile != null) {
+                      Reference storage = FirebaseStorage.instance.ref();
+                      var snapshot = await storage
+                          .child("Profile Pictures/${_user!.uid}")
+                          .putFile(selectedImageFile!);
+                      downloadUrl = await snapshot.ref.getDownloadURL();
+                    }
+                    EasyLoading.showSuccess('Signed up');
+                    UserModel data = UserModel(
+                      image: downloadUrl.isEmpty
+                          ? (networkImage ?? "")
+                          : downloadUrl,
+                      fullName: fullNameController.text,
+                      email: emailController.text,
+                      address: addressController.text,
+                      mobileNumber:
+                      ("$selectedCode~${mobileNumberController.text}"),
+                      landMark: landMarkController.text,
+                      province: provinceController.text,
+                      city: cityController.text,
+                      area: areaController.text,
+                      homeOrOffice: homeOrOfficeVar,
+                    );
+                    EasyLoading.show(status: "Uploading...");
+                    postUserData(userModel: data);
+                    if (context.mounted) {
+                      Provider.of<UserProfileProvider>(context, listen: false)
+                          .updateUserData();
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Homepage(),
+                          ),
+                          ModalRoute.withName('/'));
+                    }
+                  } catch (e) {
+                    EasyLoading.showError(e.toString());
+                  }
+                }
+              }
+                  : () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                }
+              },
+            ),
+          )
         ],
       ),
     );

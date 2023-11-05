@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maanecommerceui/providers/user_profile_provider.dart';
 import 'package:maanecommerceui/screens/get_user_data_screen.dart';
+import 'package:maanecommerceui/screens/home.dart';
 import 'package:maanecommerceui/screens/homepage.dart';
 import 'package:maanecommerceui/screens/sign_in_screen.dart';
 import 'package:provider/provider.dart';
@@ -17,11 +18,10 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final User? _user = FirebaseAuth.instance.currentUser;
   late UserModel user;
 
   void _getData() async {
-    List<UserModel> users;
+    Provider.of<UserProfileProvider>(context, listen: false).updateUserData();
     UserProfileProvider userProvider =
         Provider.of<UserProfileProvider>(context, listen: false);
 
@@ -43,7 +43,7 @@ class _AuthPageState extends State<AuthPage> {
           //User Logged in
           if (snapshot.hasData) {
             if ((user.fullName ?? "").isNotEmpty) {
-              return const Homepage();
+              return const Home();
             } else {
               return const UserDetailsInput();
             }

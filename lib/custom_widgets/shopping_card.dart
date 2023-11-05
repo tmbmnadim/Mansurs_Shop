@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ShoppingCard extends StatelessWidget {
   final String productImage;
   final String productName;
-  final String category;
+  final String description;
   final double price;
   final bool isFavourite;
   final Function() onFavourite;
@@ -16,7 +16,7 @@ class ShoppingCard extends StatelessWidget {
     super.key,
     required this.productImage,
     required this.productName,
-    required this.category,
+    required this.description,
     required this.price,
     this.isFavourite = false,
     required this.onFavourite,
@@ -28,11 +28,12 @@ class ShoppingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double discountPrice = price - (price * (discount / 100));
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: isHorizontal?380:200,
-        height: isHorizontal?120:200,
+        width: isHorizontal ? 380 : 200,
+        height: isHorizontal ? 120 : 200,
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 253, 247, 247),
           borderRadius: BorderRadius.circular(20.0),
@@ -48,7 +49,7 @@ class ShoppingCard extends StatelessWidget {
                   width: 150,
                   child: Padding(
                     padding: const EdgeInsets.all(15),
-                    child: Image.asset(
+                    child: Image.network(
                       productImage,
                       height: 150,
                       width: 150,
@@ -70,13 +71,17 @@ class ShoppingCard extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               productName,
+                              maxLines: 1,
                               style: const TextStyle(
                                 fontSize: 18,
+                                overflow: TextOverflow.ellipsis,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              category,
+                              description,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 color: Colors.grey,
                               ),
@@ -90,11 +95,33 @@ class ShoppingCard extends StatelessWidget {
                           Padding(
                             // Product Price <-------------------------
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              '\$${price.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                            child: SizedBox(
+                              width: 128,
+                              height: 40,
+                              child: RichText(
+                                text: TextSpan(children: [
+                                  if (discount > 0)
+                                    TextSpan(
+                                      text: '৳${price.toStringAsFixed(2)}\n',
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        decoration: TextDecoration.lineThrough,
+                                        overflow: TextOverflow.fade,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  TextSpan(
+                                    text:
+                                        '৳${discountPrice.toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ]),
+                                maxLines: 2,
                               ),
                             ),
                           ),
@@ -104,7 +131,8 @@ class ShoppingCard extends StatelessWidget {
                             child: const Padding(
                               padding: EdgeInsets.all(8.0),
                               child: CircleAvatar(
-                                backgroundColor: Color.fromARGB(255, 50, 194, 122),
+                                backgroundColor:
+                                    Color.fromARGB(255, 50, 194, 122),
                                 child: Icon(
                                   Icons.add,
                                   color: Colors.white,

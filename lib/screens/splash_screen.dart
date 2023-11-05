@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maanecommerceui/auth.dart';
+import 'package:maanecommerceui/providers/product_provider.dart';
 import 'package:provider/provider.dart';
 import '../custom_widgets/icon_logo.dart';
 import '../providers/user_profile_provider.dart';
@@ -15,15 +16,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<UserProfileProvider>(context, listen: false)
-        .updateUserData()
+    Provider.of<ProductProvider>(context, listen: false)
+        .updateProductData()
         .then(
-          (value) => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AuthPage(),
-            ),
-          ),
+          (value) => Provider.of<UserProfileProvider>(context, listen: false)
+              .updateUserData()
+              .then(
+                (value) => Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AuthPage(),
+                  ),
+                ),
+              ),
         );
   }
 

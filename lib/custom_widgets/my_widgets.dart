@@ -225,7 +225,7 @@ class UtilManager {
   }
 
   Widget customButton({
-    required Widget child,
+    Widget? child,
     required Function() onTap,
     Color splashColor = Colors.white,
     Color color = Colors.white,
@@ -234,6 +234,7 @@ class UtilManager {
     double borderRadius = 10,
     double width = 200,
     double height = 60,
+    DecorationImage? decorationImage,
   }) {
     return Material(
       borderRadius: BorderRadius.circular(borderRadius),
@@ -251,6 +252,7 @@ class UtilManager {
               width: borderWidth,
             ),
             borderRadius: BorderRadius.circular(borderRadius),
+            image: decorationImage,
           ),
           child: Center(
             child: child,

@@ -5,6 +5,7 @@ import '../models/user_model.dart';
 
 class UserProfileProvider extends ChangeNotifier {
   late UserModel user;
+  bool firstLoad = true;
 
   Future<void> updateUserData() async {
     user = await getUser();

@@ -34,7 +34,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-    final providerData = Provider.of<GoToPage>(context, listen: false);
+    final providerData = Provider.of<GoToPageProvider>(context, listen: false);
     return Scaffold(
       body: SizedBox(
         child: Stack(

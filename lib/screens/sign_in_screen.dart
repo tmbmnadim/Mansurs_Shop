@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:maanecommerceui/auth.dart';
 import 'package:maanecommerceui/custom_widgets/custom_switch.dart';
 import 'package:maanecommerceui/providers/go_to_page.dart';
 import 'package:maanecommerceui/screens/homepage.dart';
@@ -211,15 +212,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       .signInWithEmailAndPassword(
                         email: emailController.text,
                         password: passwordController.text,
-                      )
-                      .timeout(const Duration(seconds: 5));
+                      );
                   EasyLoading.dismiss();
                   if (user.user != null) {
                     EasyLoading.showSuccess('Signed in');
                     emailController.clear();
                     passwordController.clear();
                     if (context.mounted) {
-                      GoToPage().goToPage(context, page: const Homepage());
+                      GoToPageProvider().goToPage(context, page: const Homepage());
                     }
                   }
                 } on FirebaseAuthException catch (error) {
@@ -227,6 +227,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     EasyLoading.showError('Please type correct password');
                   } else if (error.code == 'user-not-found') {
                     EasyLoading.showError('No user with this email!');
+                  } else if (error.code == 'INVALID_LOGIN_CREDENTIALS') {
+                    EasyLoading.showError('Please, input correct credentials or Sign Up');
+                  } else{
+                    EasyLoading.showError(error.code.toString());
                   }
                 } catch (e) {
                   EasyLoading.showError(e.toString());
@@ -307,6 +311,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 EasyLoading.show(status: "Signing in...");
                 await signInWithGoogle();
                 EasyLoading.dismiss();
+                if(context.mounted) GoToPageProvider().goToPage(context, page: const AuthPage());
               } catch (e) {
                 EasyLoading.showError(e.toString());
               }
