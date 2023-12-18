@@ -3,7 +3,7 @@ import 'package:maanecommerceui/custom_widgets/my_widgets.dart';
 import 'package:maanecommerceui/providers/go_to_page.dart';
 import 'package:provider/provider.dart';
 
-import '../auth.dart';
+import '../Authentication/auth.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});

@@ -9,8 +9,7 @@ import 'package:maanecommerceui/custom_widgets/my_widgets.dart';
 import 'package:maanecommerceui/models/product_model.dart';
 import 'package:maanecommerceui/providers/product_provider.dart';
 import 'package:provider/provider.dart';
-import '../repos/get_product_repo.dart';
-import 'homepage.dart';
+import '../../repos/get_product_repo.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key, this.productIdLoc});
@@ -37,7 +36,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ProductProvider>(context, listen: false).updateProductData();
+    Provider.of<ProductProvider>(context, listen: false).getProductData();
     List<ProductModel> products =
         Provider.of<ProductProvider>(context, listen: false).products;
 
@@ -115,22 +114,24 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         productName: productNameController.text,
                         productDescription: productDescriptionController.text,
                         productId: productIDGen,
-                        productStock: int.tryParse(productStockController.text)??0,
-                        salePrice: double.tryParse(salePriceController.text)??0,
-                        purchasePrice: double.tryParse(purchasePriceController.text)??0,
-                        discount: double.tryParse(discountController.text)??0,
+                        productStock:
+                            int.tryParse(productStockController.text) ?? 0,
+                        salePrice:
+                            double.tryParse(salePriceController.text) ?? 0,
+                        purchasePrice:
+                            double.tryParse(purchasePriceController.text) ?? 0,
+                        discount: double.tryParse(discountController.text) ?? 0,
                       );
                       postProductData(productModel: data);
                       EasyLoading.showSuccess("Product Data Updated");
 
-                      if (context.mounted) {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Homepage(),
-                            ),
-                            ModalRoute.withName('/'));
-                      }
+                      selectedImageFile = null;
+                      downloadUrl = "";
+                      productNameController.clear();
+                      productDescriptionController.clear();
+                      productStockController.clear();
+                      salePriceController.clear();
+                      purchasePriceController.clear();discountController.clear();
                     } catch (e) {
                       EasyLoading.showError(e.toString());
                     }
@@ -200,7 +201,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
           const SizedBox(height: 10),
           utilManager.customTextField(
             labelText: "Product Description",
-            hintText: "Very fresh potatoes! You will not find such fresh potatoes anywhere else in the market.",
+            hintText:
+                "Very fresh potatoes! You will not find such fresh potatoes anywhere else in the market.",
             controller: productDescriptionController,
             hintColor: Colors.black54,
             labelColor: Colors.black54,

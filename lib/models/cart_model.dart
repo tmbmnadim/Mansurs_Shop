@@ -1,12 +1,11 @@
-class ProductModel {
-  late int productId, productStock;
+class CartModel {
+  late int productId, productStock, quantity;
   int? rating;
   late String productName, productImage, productDescription;
   late double salePrice, purchasePrice, discount;
   String? databaseKey, review;
-  bool? isFavourite;
 
-  ProductModel({
+  CartModel({
     required this.productId,
     required this.productStock,
     required this.productName,
@@ -15,20 +14,21 @@ class ProductModel {
     required this.salePrice,
     required this.purchasePrice,
     required this.discount,
-    this.isFavourite = false,
+    required this.quantity,
     this.review,
     this.rating,
     this.databaseKey,
   });
 
-  ProductModel.fromJson({required Map<String, dynamic> json}) {
+
+
+  CartModel.fromJson({required Map<String, dynamic> json}) {
     productId = json['productId'];
+    quantity = json['quantity'];
     productStock = json['productStock'];
-    rating = json['rating'];
     productName = json['productName'];
     productImage = json['productImage'];
     productDescription = json['productDescription'];
-    review = json['review'];
     salePrice = json['salePrice'];
     purchasePrice = json['purchasePrice'];
     discount = json['discount'];
@@ -36,12 +36,11 @@ class ProductModel {
 
   Map<String, dynamic> toJson() => <String, dynamic>{
     'productId': productId,
+    'quantity': quantity,
     'productStock': productStock,
-    'rating': rating,
     'productName': productName,
     'productImage': productImage,
     'productDescription': productDescription,
-    'review': review,
     'salePrice': salePrice,
     'purchasePrice': purchasePrice,
     'discount': discount,

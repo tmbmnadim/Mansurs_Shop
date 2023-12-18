@@ -1,34 +1,32 @@
-class ProductModel {
-  late int productId, productStock;
-  int? rating;
-  late String productName, productImage, productDescription;
-  late double salePrice, purchasePrice, discount;
-  String? databaseKey, review;
-  bool? isFavourite;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  ProductModel({
+class OrderModel {
+  late int productId, productStock, quantity;
+  late Timestamp orderTime;
+  late String productName, userID;
+  late double salePrice, purchasePrice, discount;
+  String? databaseKey;
+
+  OrderModel({
     required this.productId,
+    required this.userID,
     required this.productStock,
     required this.productName,
-    required this.productImage,
-    required this.productDescription,
     required this.salePrice,
     required this.purchasePrice,
+    required this.orderTime,
     required this.discount,
-    this.isFavourite = false,
-    this.review,
-    this.rating,
+    required this.quantity,
     this.databaseKey,
   });
 
-  ProductModel.fromJson({required Map<String, dynamic> json}) {
+  OrderModel.fromJson({required Map<String, dynamic> json}) {
     productId = json['productId'];
+    userID = json['userID'];
     productStock = json['productStock'];
-    rating = json['rating'];
+    orderTime = json['orderTime'];
+    quantity = json['quantity'];
     productName = json['productName'];
-    productImage = json['productImage'];
-    productDescription = json['productDescription'];
-    review = json['review'];
     salePrice = json['salePrice'];
     purchasePrice = json['purchasePrice'];
     discount = json['discount'];
@@ -36,12 +34,11 @@ class ProductModel {
 
   Map<String, dynamic> toJson() => <String, dynamic>{
     'productId': productId,
+    'userID': userID,
     'productStock': productStock,
-    'rating': rating,
     'productName': productName,
-    'productImage': productImage,
-    'productDescription': productDescription,
-    'review': review,
+    'orderTime': orderTime,
+    'quantity': quantity,
     'salePrice': salePrice,
     'purchasePrice': purchasePrice,
     'discount': discount,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../custom_widgets/my_widgets.dart';
+import '../../custom_widgets/my_widgets.dart';
 
 class SetNewPassword extends StatefulWidget {
   const SetNewPassword({super.key});

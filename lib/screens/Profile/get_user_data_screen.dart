@@ -4,14 +4,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:maanecommerceui/auth.dart';
 import 'package:maanecommerceui/custom_widgets/my_widgets.dart';
 import 'package:provider/provider.dart';
-
-import '../models/user_model.dart';
-import '../providers/user_profile_provider.dart';
-import '../repos/user_get_repo.dart';
-import 'homepage.dart';
+import '../../models/user_model.dart';
+import '../../providers/profile_provider.dart';
+import '../../repos/get_profile_repo.dart';
+import '../Home/home.dart';
 
 class UserDetailsInput extends StatefulWidget {
   const UserDetailsInput({super.key, this.fullName});
@@ -42,11 +40,9 @@ class _UserDetailsInputState extends State<UserDetailsInput> {
   @override
   void initState() {
     super.initState();
-    UserProfileProvider provider =
-        Provider.of<UserProfileProvider>(context, listen: false);
-    if (!(Provider.of<UserProfileProvider>(context, listen: false).firstLoad)) {
+    if (!(Provider.of<ProfileProvider>(context, listen: false).firstLoad)) {
       UserModel user =
-          Provider.of<UserProfileProvider>(context, listen: false).user;
+          Provider.of<ProfileProvider>(context, listen: false).user;
 
       networkImage = user.image;
       fullNameController.text = user.fullName ?? "";
@@ -61,7 +57,7 @@ class _UserDetailsInputState extends State<UserDetailsInput> {
       areaController.text = user.area ?? "";
       homeOrOfficeVar = user.homeOrOffice ?? "";
     } else {
-      Provider.of<UserProfileProvider>(context, listen: false).firstLoad =
+      Provider.of<ProfileProvider>(context, listen: false).firstLoad =
           false;
       fullNameController.text = widget.fullName ?? "";
       emailController.text = _user?.email ?? "";
@@ -308,6 +304,7 @@ class _UserDetailsInputState extends State<UserDetailsInput> {
                           : downloadUrl,
                       fullName: fullNameController.text,
                       email: emailController.text,
+                      userStat: 'admin',///TODO: Change this to "General"
                       address: addressController.text,
                       mobileNumber:
                       ("$selectedCode~${mobileNumberController.text}"),
@@ -320,12 +317,12 @@ class _UserDetailsInputState extends State<UserDetailsInput> {
                     EasyLoading.show(status: "Uploading...");
                     postUserData(userModel: data);
                     if (context.mounted) {
-                      Provider.of<UserProfileProvider>(context, listen: false)
+                      Provider.of<ProfileProvider>(context, listen: false)
                           .updateUserData();
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Homepage(),
+                            builder: (context) => const Home(),
                           ),
                           ModalRoute.withName('/'));
                     }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:maanecommerceui/auth.dart';
+import 'package:maanecommerceui/providers/cart_provider.dart';
+import 'package:maanecommerceui/screens/Authentication/auth.dart';
 import 'package:maanecommerceui/providers/product_provider.dart';
 import 'package:provider/provider.dart';
-import '../custom_widgets/icon_logo.dart';
-import '../providers/user_profile_provider.dart';
+import '../../custom_widgets/icon_logo.dart';
+import '../../providers/profile_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,20 +17,24 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ProductProvider>(context, listen: false)
-        .updateProductData()
-        .then(
-          (value) => Provider.of<UserProfileProvider>(context, listen: false)
-              .updateUserData()
-              .then(
-                (value) => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AuthPage(),
-                  ),
+    Provider.of<ProductProvider>(context, listen: false).getProductData().then(
+      (value) {
+        Provider.of<ProfileProvider>(context, listen: false)
+            .getFavouriteProducts();
+        Provider.of<CartProvider>(context, listen: false)
+            .getAllCartItems();
+        Provider.of<ProfileProvider>(context, listen: false)
+            .updateUserData()
+            .then(
+              (value) => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AuthPage(),
                 ),
               ),
-        );
+            );
+      },
+    );
   }
 
   @override

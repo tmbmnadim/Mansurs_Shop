@@ -5,6 +5,7 @@ class ShoppingCard extends StatelessWidget {
   final String productName;
   final String description;
   final double price;
+  final int productStock;
   final bool isFavourite;
   final Function() onFavourite;
   final Function() onAdd;
@@ -18,6 +19,7 @@ class ShoppingCard extends StatelessWidget {
     required this.productName,
     required this.description,
     required this.price,
+    required this.productStock,
     this.isFavourite = false,
     required this.onFavourite,
     required this.onAdd,
@@ -32,7 +34,7 @@ class ShoppingCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: isHorizontal ? 380 : 200,
+        width: isHorizontal ? 380 : 180,
         height: isHorizontal ? 120 : 200,
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 253, 247, 247),
@@ -43,17 +45,23 @@ class ShoppingCard extends StatelessWidget {
             ColumnOrRow(
               isHorizontal: isHorizontal,
               children: [
-                // Image Container <-----------------
+                /// Image Container <-----------------
                 SizedBox(
                   height: 150,
                   width: 150,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
+                  child: ClipRRect(
+                    borderRadius: isHorizontal
+                        ? const BorderRadius.horizontal(
+                            left: Radius.circular(20),
+                          )
+                        : const BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
                     child: Image.network(
                       productImage,
                       height: 150,
                       width: 150,
-                      fit: BoxFit.contain,
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
                 ),
@@ -64,26 +72,33 @@ class ShoppingCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        // Product title and Category <--------------
-                        padding: const EdgeInsets.all(8.0),
+                        /// Product title and Category <--------------
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 8,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
+                            ///------------------------ Product Name
                             Text(
                               productName,
                               maxLines: 1,
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 17,
                                 overflow: TextOverflow.ellipsis,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+
+                            ///------------------------ Product Description
                             Text(
                               description,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 color: Colors.grey,
+                                fontSize: 14,
                               ),
                             ),
                           ],
@@ -93,10 +108,10 @@ class ShoppingCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            // Product Price <-------------------------
+                            ///------------------------ Product Price
                             padding: const EdgeInsets.all(8.0),
                             child: SizedBox(
-                              width: 128,
+                              width: 100,
                               height: 40,
                               child: RichText(
                                 text: TextSpan(children: [
@@ -105,12 +120,14 @@ class ShoppingCard extends StatelessWidget {
                                       text: '৳${price.toStringAsFixed(2)}\n',
                                       style: const TextStyle(
                                         color: Colors.black,
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         decoration: TextDecoration.lineThrough,
                                         overflow: TextOverflow.fade,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
+
+                                  ///------------------------ Product Discount
                                   TextSpan(
                                     text:
                                         '৳${discountPrice.toStringAsFixed(2)}',
@@ -125,16 +142,23 @@ class ShoppingCard extends StatelessWidget {
                               ),
                             ),
                           ),
-                          GestureDetector(
-                            // Add Button <-----------------------
-                            onTap: onAdd,
-                            child: const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                backgroundColor:
-                                    Color.fromARGB(255, 50, 194, 122),
-                                child: Icon(
-                                  Icons.add,
+
+                          ///------------------------ Add to shopping cart
+                          Material(
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(100),
+                              onTap: productStock == 0 ? null : onAdd,
+                              child: Ink(
+                                width: 50,
+                                height: 35,
+                                decoration: BoxDecoration(
+                                  color: productStock == 0
+                                      ? Colors.grey
+                                      : const Color.fromARGB(255, 50, 194, 122),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: const Icon(
+                                  Icons.add_shopping_cart,
                                   color: Colors.white,
                                 ),
                               ),
@@ -177,14 +201,14 @@ class ShoppingCard extends StatelessWidget {
                 ),
               ),
             Positioned(
-              top: 4.0,
-              right: 4.0,
-              child: IconButton(
-                icon: Icon(
+              top: 10.0,
+              right: 10.0,
+              child: GestureDetector(
+                onTap: onFavourite,
+                child: Icon(
                   isFavourite ? Icons.favorite : Icons.favorite_border,
                   color: isFavourite ? Colors.red : Colors.black,
                 ),
-                onPressed: onFavourite,
               ),
             ),
           ],
