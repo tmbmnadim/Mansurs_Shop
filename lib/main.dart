@@ -7,6 +7,7 @@ import 'package:maanecommerceui/providers/go_to_page.dart';
 import 'package:maanecommerceui/providers/orders_provider.dart';
 import 'package:maanecommerceui/providers/product_provider.dart';
 import 'package:maanecommerceui/providers/profile_provider.dart';
+import 'package:maanecommerceui/repos/const.dart';
 import 'package:maanecommerceui/screens/Start%20Screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -16,6 +17,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Stripe.publishableKey = pubKey;
+  await Stripe.instance.applySettings();
   runApp(
     MultiProvider(
       providers: [

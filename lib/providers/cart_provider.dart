@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:maanecommerceui/models/cart_model.dart';
 import 'package:maanecommerceui/repos/get_orders_repo.dart';
+import 'package:maanecommerceui/repos/payment_repo.dart';
 import '../models/order_model.dart';
 import '../repos/get_profile_repo.dart';
 
@@ -40,6 +41,7 @@ class CartProvider extends ChangeNotifier {
       );
       postOrderData(order: order);
     }
+    makePaymentRepo(amount: "$subtotal", currency: "USD");
     EasyLoading.showSuccess("Order Placed!");
   }
 
