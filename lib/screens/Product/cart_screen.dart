@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maanecommerceui/providers/cart_provider.dart';
 import 'package:maanecommerceui/providers/product_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 
 class UserCartScreen extends StatefulWidget {
   const UserCartScreen({super.key});
@@ -53,6 +54,13 @@ class _UserCartScreenState extends State<UserCartScreen> {
                     elevation: 0,
                   ),
                   onPressed: () {
+                    stripe.Stripe.instance.initPaymentSheet(
+                      paymentSheetParameters:
+                          const stripe.SetupPaymentSheetParameters(
+                        primaryButtonLabel: 'Payment',
+                        billingDetails: stripe.BillingDetails(),
+                      ),
+                    );
                     cart.sentAsOrders();
                     Provider.of<ProductProvider>(context, listen: false)
                         .orderedProduct(cartItems: cart.cartItems);
