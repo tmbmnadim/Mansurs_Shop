@@ -10,6 +10,7 @@ import 'package:maanecommerceui/screens/Home/homepage.dart';
 import 'package:maanecommerceui/screens/Authentication/sign_up_screen.dart';
 import '../../custom_widgets/icon_logo.dart';
 import '../../custom_widgets/my_widgets.dart';
+import '../Home/home.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -219,7 +220,12 @@ class _SignInScreenState extends State<SignInScreen> {
                     emailController.clear();
                     passwordController.clear();
                     if (context.mounted) {
-                      GoToPageProvider().goToPage(context, page: const Homepage());
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Home(),
+                          ),
+                          ModalRoute.withName('/'));
                     }
                   }
                 } on FirebaseAuthException catch (error) {

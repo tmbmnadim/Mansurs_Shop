@@ -3,7 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:maanecommerceui/models/cart_model.dart';
+import 'package:maanecommerceui/providers/product_provider.dart';
 import 'package:maanecommerceui/repos/get_orders_repo.dart';
+import 'package:maanecommerceui/repos/payment_repo.dart';
+import 'package:provider/provider.dart';
 import '../models/order_model.dart';
 import '../repos/get_profile_repo.dart';
 
@@ -20,27 +23,49 @@ class CartProvider extends ChangeNotifier {
   calculateSubtotal() {
     subtotal = 0;
     for (var element in cartItems) {
-      subtotal += (element.quantity * element.salePrice);
+      subtotal += (element.quantity *
+          (element.salePrice - (element.salePrice * (element.discount / 100))));
     }
     notifyListeners();
   }
 
-  sentAsOrders(){
-    for (var cartItem in cartItems) {
-      OrderModel order = OrderModel(
-        productId: cartItem.productId,
-        userID: FirebaseAuth.instance.currentUser!.uid,
-        productStock: cartItem.productStock,
-        productName: cartItem.productName,
-        salePrice: cartItem.salePrice,
-        purchasePrice: cartItem.purchasePrice,
-        orderTime: Timestamp.now(),
-        discount: cartItem.discount,
-        quantity: cartItem.quantity,
-      );
-      postOrderData(order: order);
-    }
-    EasyLoading.showSuccess("Order Placed!");
+  sentAsOrders(context) async {
+    MakePayment payment = MakePayment();
+
+    payment.paymentIntentData = await payment.createPaymentIntent(
+      amount: "${(subtotal * 100).floor()}",
+      currency: "USD",
+    );
+
+    await payment.makePaymentRepo(
+      amount: "${(subtotal * 100).floor()}",
+      currency: "USD",
+    );
+
+    await payment.displayPaymentSheet().then(() {
+      // if (payment.paymentIntentData!["status"] == "succeeded") {
+      for (var cartItem in cartItems) {
+        OrderModel order = OrderModel(
+          productId: cartItem.productId,
+          userID: FirebaseAuth.instance.currentUser!.uid,
+          productStock: cartItem.productStock,
+          productName: cartItem.productName,
+          salePrice: cartItem.salePrice,
+          purchasePrice: cartItem.purchasePrice,
+          orderTime: Timestamp.now(),
+          discount: cartItem.discount,
+          quantity: cartItem.quantity,
+        );
+        postOrderData(order: order);
+      }
+      Provider.of<ProductProvider>(context, listen: false)
+          .orderedProduct(cartItems: cartItems);
+      clearCart();
+      EasyLoading.showSuccess("Order Placed!");
+      // }
+      // print(
+      //     "---------------------------------------------------------------------------------------\n${payment.paymentIntentData!["status"]}\n---------------------------------------------------------------------------------------");
+    });
   }
 
   addToCart({required CartModel cartModel}) async {
