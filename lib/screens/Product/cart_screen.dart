@@ -64,12 +64,11 @@ class _UserCartScreenState extends State<UserCartScreen> {
                                   productId: singleItem.productId);
                       int stockIs = product?.productStock ?? 0;
                       if (stockIs == 0) {
-                        print("REMOVED--------------------------------------");
                         cart.removeFromCart(cartModel: singleItem);
                       }
                     }
                     Future.delayed(Duration.zero, () {
-                      if(cart.cartItems.isNotEmpty) cart.sentAsOrders(context);
+                      if (cart.cartItems.isNotEmpty) cart.sentAsOrders(context);
                     });
                     // cart.clearCart();
                   },
@@ -154,7 +153,7 @@ class _UserCartScreenState extends State<UserCartScreen> {
                             ),
                             const SizedBox(width: 20),
                             Text(
-                              'X ${cart.cartItems[index].salePrice} = ${cart.cartItems[index].quantity * cart.cartItems[index].salePrice}',
+                              'X ${(cart.cartItems[index].salePrice - (cart.cartItems[index].salePrice * (cart.cartItems[index].discount / 100)))} = ${cart.cartItems[index].quantity * cart.cartItems[index].salePrice - (cart.cartItems[index].salePrice * (cart.cartItems[index].discount / 100))}',
                               style: const TextStyle(
                                   color: Colors.black54, fontSize: 20),
                             )
