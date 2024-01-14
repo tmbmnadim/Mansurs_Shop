@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maanecommerceui/providers/cart_provider.dart';
 import 'package:maanecommerceui/screens/Authentication/auth.dart';
@@ -17,24 +18,40 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ProductProvider>(context, listen: false).getProductData().then(
-      (value) {
-        Provider.of<ProfileProvider>(context, listen: false)
-            .getFavouriteProducts();
-        Provider.of<CartProvider>(context, listen: false)
-            .getAllCartItems();
-        Provider.of<ProfileProvider>(context, listen: false)
-            .updateUserData()
-            .then(
-              (value) => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AuthPage(),
-                ),
-              ),
-            );
-      },
-    );
+    if (FirebaseAuth.instance.currentUser != null) {
+      Provider.of<ProductProvider>(context, listen: false)
+          .getProductData()
+          .then(
+        (value) {
+          Provider.of<ProfileProvider>(context, listen: false)
+              .getFavouriteProducts();
+          Provider.of<CartProvider>(context, listen: false).getAllCartItems();
+          Provider.of<ProfileProvider>(context, listen: false)
+              .updateUserData()
+              .then(
+            (value) {
+              Future.delayed(Duration.zero, () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AuthPage(),
+                  ),
+                );
+              });
+            },
+          );
+        },
+      );
+    } else {
+      Future.delayed(Duration.zero, () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AuthPage(),
+          ),
+        );
+      });
+    }
   }
 
   @override

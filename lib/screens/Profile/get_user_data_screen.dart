@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:maanecommerceui/custom_widgets/my_widgets.dart';
+import 'package:maanecommerceui/screens/Start%20Screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import '../../models/user_model.dart';
 import '../../providers/profile_provider.dart';
 import '../../repos/get_profile_repo.dart';
-import '../Home/home.dart';
 
 class UserDetailsInput extends StatefulWidget {
   const UserDetailsInput({super.key, this.fullName});
@@ -322,7 +322,7 @@ class _UserDetailsInputState extends State<UserDetailsInput> {
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Home(),
+                            builder: (context) => const SplashScreen(),
                           ),
                           ModalRoute.withName('/'));
                     }

@@ -5,6 +5,7 @@ import 'package:maanecommerceui/repos/get_product_repo.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/orders_provider.dart';
+import '../../repos/get_orders_repo.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
@@ -143,9 +144,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                       order.deleteOrder(
                                           orderModel: order.userOrders[index]
                                               [perUser]);
-                                      Provider.of<OrdersProvider>(context,
-                                              listen: false)
-                                          .getOrderData();
                                       EasyLoading.showSuccess(
                                         "Deleted Product",
                                       );

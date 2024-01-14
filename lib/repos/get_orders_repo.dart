@@ -28,6 +28,11 @@ Future<void> deleteOrderRepo({required OrderModel orderModel}) async {
   await _orders.doc(orderModel.databaseKey).delete();
 }
 
+Future<void> deleteAllOrders() async{
+  final QuerySnapshot data = await _orders.get();
+  data.docs.clear();
+}
+
 Future<void> postOrderData({required OrderModel order}) async {
   try {
     await _orders.add(order.toJson());

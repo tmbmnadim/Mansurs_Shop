@@ -212,11 +212,11 @@ class _HomepageState extends State<Homepage> {
           },
           body: SingleChildScrollView(
             child: Consumer2<ProductProvider, ProfileProvider>(
-                builder: (context, value, profile, child) {
+                builder: (context, product, profile, child) {
               List<ProductModel> tempProducts = [];
               List<ProductModel> sortedProducts = [];
               tempProducts.addAll(
-                value.products.where((element) => element.discount > 0),
+                product.products.where((element) => element.discount > 0),
               );
               tempProducts.sort((a, b) => a.discount.compareTo(b.discount));
               sortedProducts.addAll(tempProducts.reversed);

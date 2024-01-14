@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:maanecommerceui/models/product_model.dart';
 import 'package:maanecommerceui/providers/cart_provider.dart';
 import 'package:maanecommerceui/providers/product_provider.dart';
 import 'package:provider/provider.dart';
@@ -52,8 +55,22 @@ class _UserCartScreenState extends State<UserCartScreen> {
                     backgroundColor: const Color.fromARGB(255, 50, 194, 122),
                     elevation: 0,
                   ),
-                  onPressed: () {
-                    cart.sentAsOrders(context);
+                  onPressed: () async {
+                    for (var singleItem in cart.cartItems) {
+                      ProductModel? product =
+                          await Provider.of<ProductProvider>(context,
+                                  listen: false)
+                              .getSingleProductData(
+                                  productId: singleItem.productId);
+                      int stockIs = product?.productStock ?? 0;
+                      if (stockIs == 0) {
+                        print("REMOVED--------------------------------------");
+                        cart.removeFromCart(cartModel: singleItem);
+                      }
+                    }
+                    Future.delayed(Duration.zero, () {
+                      if(cart.cartItems.isNotEmpty) cart.sentAsOrders(context);
+                    });
                     // cart.clearCart();
                   },
                   child: const Text(
@@ -70,21 +87,21 @@ class _UserCartScreenState extends State<UserCartScreen> {
           )),
         );
       }),
-      body: Consumer<CartProvider>(builder: (context, value, child) {
-        return value.cartItems.isEmpty
+      body: Consumer<CartProvider>(builder: (context, cart, child) {
+        return cart.cartItems.isEmpty
             ? const Center(child: Text('Cart is Empty'))
             : ListView.builder(
-                itemCount: value.cartItems.length,
+                itemCount: cart.cartItems.length,
                 itemBuilder: (context, index) {
                   return Card(
                       color: const Color.fromARGB(255, 253, 247, 247),
                       child: ListTile(
-                        title: Text(value.cartItems[index].productName),
+                        title: Text(cart.cartItems[index].productName),
                         trailing: GestureDetector(
                           onTap: () {
-                            value.removeFromCart(
-                                cartModel: value.cartItems[index]);
-                            value.calculateSubtotal();
+                            cart.removeFromCart(
+                                cartModel: cart.cartItems[index]);
+                            cart.calculateSubtotal();
                           },
                           child: const Icon(
                             Icons.delete,
@@ -95,7 +112,7 @@ class _UserCartScreenState extends State<UserCartScreen> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                value.subQuantity(index: index);
+                                cart.subQuantity(index: index);
                               },
                               child: const CircleAvatar(
                                 radius: 12,
@@ -114,13 +131,13 @@ class _UserCartScreenState extends State<UserCartScreen> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text(value.cartItems[index].quantity.toString()),
+                            Text(cart.cartItems[index].quantity.toString()),
                             const SizedBox(
                               width: 10,
                             ),
                             GestureDetector(
                               onTap: () {
-                                value.addQuantity(index: index);
+                                cart.addQuantity(index: index);
                               },
                               child: const CircleAvatar(
                                 radius: 12,
@@ -137,7 +154,7 @@ class _UserCartScreenState extends State<UserCartScreen> {
                             ),
                             const SizedBox(width: 20),
                             Text(
-                              'X ${value.cartItems[index].salePrice} = ${value.cartItems[index].quantity * value.cartItems[index].salePrice}',
+                              'X ${cart.cartItems[index].salePrice} = ${cart.cartItems[index].quantity * cart.cartItems[index].salePrice}',
                               style: const TextStyle(
                                   color: Colors.black54, fontSize: 20),
                             )

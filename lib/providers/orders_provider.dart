@@ -14,6 +14,8 @@ class OrdersProvider extends ChangeNotifier {
   }
 
   Future<void> getUserOrderData() async {
+    userList = [];
+    userOrders = [];
     for (int i = 0; i < orders.length; i++) {
       if (!userList.contains(orders[i].userID)) {
         userList.add(orders[i].userID);
@@ -25,9 +27,16 @@ class OrdersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  deleteOrder({required OrderModel orderModel}) {
-    deleteOrderRepo(orderModel: orderModel);
-    getOrders();
+  deleteAllOrders(){
+    deleteAllOrders();
+    getOrderData();
     notifyListeners();
+  }
+
+  deleteOrder({required OrderModel orderModel}) {
+    deleteOrderRepo(orderModel: orderModel).then((value) {
+      getOrderData();
+      notifyListeners();
+    });
   }
 }

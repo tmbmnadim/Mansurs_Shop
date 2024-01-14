@@ -8,6 +8,7 @@ import 'package:maanecommerceui/custom_widgets/custom_switch.dart';
 import 'package:maanecommerceui/providers/go_to_page.dart';
 import 'package:maanecommerceui/screens/Home/homepage.dart';
 import 'package:maanecommerceui/screens/Authentication/sign_up_screen.dart';
+import 'package:maanecommerceui/screens/Start%20Screens/splash_screen.dart';
 import '../../custom_widgets/icon_logo.dart';
 import '../../custom_widgets/my_widgets.dart';
 import '../Home/home.dart';
@@ -223,7 +224,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Home(),
+                            builder: (context) => const SplashScreen(),
                           ),
                           ModalRoute.withName('/'));
                     }
@@ -239,7 +240,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     EasyLoading.showError(error.code.toString());
                   }
                 } catch (e) {
-                  EasyLoading.showError(e.toString());
+                  EasyLoading.showError("Sign In Exception:$e");
                 }
               }
             },

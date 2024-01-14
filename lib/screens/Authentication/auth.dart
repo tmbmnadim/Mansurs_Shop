@@ -30,7 +30,9 @@ class _AuthPageState extends State<AuthPage> {
   @override
   void initState() {
     super.initState();
-    _getData();
+    if (_auth.currentUser != null) {
+      _getData();
+    }
   }
 
   @override

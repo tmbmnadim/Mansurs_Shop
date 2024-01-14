@@ -13,6 +13,16 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<ProductModel?> getSingleProductData({required int productId}) async {
+    getProductData();
+    for(ProductModel product in products){
+      if(product.productId == productId){
+        return product;
+      }
+    }
+    return null;
+  }
+
   orderedProduct({required List<CartModel> cartItems}) {
     for (var item in cartItems) {
       int productIndex =
