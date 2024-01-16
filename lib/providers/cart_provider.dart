@@ -90,6 +90,7 @@ class CartProvider extends ChangeNotifier {
       }
     } else {
       await addToCartRepo(cartModel: cartModel);
+      EasyLoading.showSuccess('Item Added to Cart');
       getAllCartItems();
     }
     calculateSubtotal();

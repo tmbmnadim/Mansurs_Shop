@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:maanecommerceui/models/product_model.dart';
 import 'package:maanecommerceui/providers/cart_provider.dart';

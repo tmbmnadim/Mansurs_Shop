@@ -13,8 +13,6 @@ class MakePayment {
     required String currency,
   }) async {
     try {
-      print(
-          "The Amount is>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$amount");
       // paymentIntentData =
       //     await createPaymentIntent(amount: amount, currency: currency);
       if (paymentIntentData != null) {

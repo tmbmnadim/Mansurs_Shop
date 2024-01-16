@@ -6,6 +6,7 @@ import 'package:maanecommerceui/models/product_model.dart';
 import 'package:maanecommerceui/providers/cart_provider.dart';
 import 'package:maanecommerceui/providers/product_provider.dart';
 import 'package:maanecommerceui/screens/Product/add_product_screen.dart';
+import 'package:maanecommerceui/screens/Product/view_product_details.dart';
 import 'package:maanecommerceui/screens/Profile/get_user_data_screen.dart';
 import 'package:provider/provider.dart';
 import '../../custom_widgets/shopping_card.dart';
@@ -200,7 +201,18 @@ class _HomepageState extends State<Homepage> {
                                         listen: false)
                                     .addToCart(cartModel: tempCart);
                               },
-                              onTap: () {},
+                              onTap: () {
+                                Future.delayed(Duration.zero, () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ViewProductDetails(
+                                        product: product.products[index],
+                                      ),
+                                    ),
+                                  );
+                                });
+                              },
                             ),
                           ),
                         );
@@ -343,7 +355,7 @@ class _HomepageState extends State<Homepage> {
             height: 50,
             color: const Color.fromARGB(255, 50, 194, 122),
             child: const Icon(
-              Icons.filter_list_alt,
+              Icons.search,
               color: Colors.white,
             ),
             onTap: () {

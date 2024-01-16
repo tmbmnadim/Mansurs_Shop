@@ -6,12 +6,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:maanecommerceui/screens/Authentication/auth.dart';
 import 'package:maanecommerceui/custom_widgets/custom_switch.dart';
 import 'package:maanecommerceui/providers/go_to_page.dart';
-import 'package:maanecommerceui/screens/Home/homepage.dart';
 import 'package:maanecommerceui/screens/Authentication/sign_up_screen.dart';
 import 'package:maanecommerceui/screens/Start%20Screens/splash_screen.dart';
 import '../../custom_widgets/icon_logo.dart';
 import '../../custom_widgets/my_widgets.dart';
-import '../Home/home.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
