@@ -91,72 +91,135 @@ class _UserCartScreenState extends State<UserCartScreen> {
                 itemCount: cart.cartItems.length,
                 itemBuilder: (context, index) {
                   return Card(
-                      color: const Color.fromARGB(255, 253, 247, 247),
-                      child: ListTile(
-                        title: Text(cart.cartItems[index].productName),
-                        trailing: GestureDetector(
-                          onTap: () {
-                            cart.removeFromCart(
-                                cartModel: cart.cartItems[index]);
-                            cart.calculateSubtotal();
-                          },
-                          child: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
+                      color: const Color.fromARGB(255, 50, 194, 122),
+                      child: Stack(
+                        children: [
+                          ListTile(
+                            /// --------------------------------Name of Product
+                            title: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Text(
+                                cart.cartItems[index].productName,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+
+                            /// -------------------------------- Quantity Buttons
+                            subtitle: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: Row(
+                                children: [
+                                  /// -------------------------- Reduce Quantity
+                                  GestureDetector(
+                                    onTap: () {
+                                      cart.subQuantity(index: index);
+                                    },
+                                    child: const CircleAvatar(
+                                      radius: 15,
+                                      backgroundColor: Colors.white,
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.remove,
+                                          color: Colors.black,
+                                          size: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  // IconButton(style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.blue)),onPressed: () {}, icon: const Icon(Icons.remove)),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+
+                                  /// -------------------------- Product Quantity
+                                  Text(
+                                    cart.cartItems[index].quantity.toString(),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+
+                                  /// -------------------------- Add to Quantity
+                                  GestureDetector(
+                                    onTap: () {
+                                      cart.addQuantity(index: index);
+                                    },
+                                    child: const CircleAvatar(
+                                      radius: 14,
+                                      backgroundColor: Colors.white,
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.add,
+                                          color: Colors.black,
+                                          size: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 20),
+
+                                  /// --------------------------------- Subtotal
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              'X ${(cart.cartItems[index].salePrice - (cart.cartItems[index].salePrice * (cart.cartItems[index].discount / 100)))}',
+                                          style: const TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 20),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              ' = ${cart.cartItems[index].quantity * cart.cartItems[index].salePrice - (cart.cartItems[index].salePrice * (cart.cartItems[index].discount / 100))}',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                        subtitle: Row(
-                          children: [
-                            GestureDetector(
+                          Positioned(
+                            right: 0,
+                            child: GestureDetector(
                               onTap: () {
-                                cart.subQuantity(index: index);
+                                cart.removeFromCart(
+                                    cartModel: cart.cartItems[index]);
+                                cart.calculateSubtotal();
                               },
-                              child: const CircleAvatar(
-                                radius: 12,
-                                backgroundColor:
-                                    Color.fromARGB(255, 50, 194, 122),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.remove,
-                                    color: Colors.white,
-                                    size: 15,
+                              child: Container(
+                                width: 80,
+                                height: 100,
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.horizontal(
+                                    right: Radius.circular(10),
                                   ),
+                                ),
+                                child: const Icon(
+                                  Icons.delete,
+                                  color: Colors.white,
+                                  size: 32,
                                 ),
                               ),
                             ),
-                            // IconButton(style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.blue)),onPressed: () {}, icon: const Icon(Icons.remove)),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(cart.cartItems[index].quantity.toString()),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                cart.addQuantity(index: index);
-                              },
-                              child: const CircleAvatar(
-                                radius: 12,
-                                backgroundColor:
-                                    Color.fromARGB(255, 50, 194, 122),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.add,
-                                    color: Colors.white,
-                                    size: 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 20),
-                            Text(
-                              'X ${(cart.cartItems[index].salePrice - (cart.cartItems[index].salePrice * (cart.cartItems[index].discount / 100)))} = ${cart.cartItems[index].quantity * cart.cartItems[index].salePrice - (cart.cartItems[index].salePrice * (cart.cartItems[index].discount / 100))}',
-                              style: const TextStyle(
-                                  color: Colors.black54, fontSize: 20),
-                            )
-                          ],
-                        ),
+                          ),
+                        ],
                       ));
                 },
               );

@@ -106,7 +106,7 @@ class _HomeState extends State<Home> {
                   style: const TextStyle(fontSize: 25),
                 ),
                 Card(
-                  color: const Color.fromARGB(255, 253, 247, 247),
+                  color: const Color.fromARGB(255, 50, 194, 122),
                   child: ListTile(
                     onTap: () {
                       setState(() {
@@ -114,14 +114,25 @@ class _HomeState extends State<Home> {
                       });
                       _key.currentState?.closeEndDrawer();
                     },
-                    title: const Text('Profile'),
-                    trailing: const Icon(Icons.arrow_forward_ios),
+                    title: const Text(
+                      'Profile',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                      size: 22,
+                    ),
                   ),
                 ),
                 Visibility(
                   visible: value.user.userStat == 'admin',
                   child: Card(
-                    color: const Color.fromARGB(255, 253, 247, 247),
+                    color: const Color.fromARGB(255, 50, 194, 122),
                     child: ListTile(
                       onTap: () {
                         setState(() {
@@ -129,15 +140,26 @@ class _HomeState extends State<Home> {
                         });
                         _key.currentState?.closeEndDrawer();
                       },
-                      title: const Text('Add Product'),
-                      trailing: const Icon(Icons.arrow_forward_ios),
+                      title: const Text(
+                        'Add Product',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
+                        size: 22,
+                      ),
                     ),
                   ),
                 ),
                 Visibility(
                   visible: value.user.userStat == 'admin',
                   child: Card(
-                    color: const Color.fromARGB(255, 253, 247, 247),
+                    color: const Color.fromARGB(255, 50, 194, 122),
                     child: ListTile(
                       onTap: () {
                         setState(() {
@@ -145,27 +167,38 @@ class _HomeState extends State<Home> {
                         });
                         _key.currentState?.closeEndDrawer();
                       },
-                      title: const Text('Orders'),
-                      trailing: const Icon(Icons.arrow_forward_ios),
+                      title: const Text(
+                        'Orders',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
+                        size: 22,
+                      ),
                     ),
                   ),
                 ),
                 const Spacer(),
                 Card(
-                  color: const Color.fromARGB(255, 253, 247, 247),
+                  color: Colors.red,
                   child: ListTile(
                     onTap: signOut,
                     title: const Text(
                       'Logout',
                       style: TextStyle(
-                        color: Colors.red,
+                        color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     trailing: const Icon(
                       Icons.logout,
-                      color: Colors.red,
+                      color: Colors.white,
                     ),
                   ),
                 ),

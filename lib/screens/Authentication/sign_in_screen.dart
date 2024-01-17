@@ -162,38 +162,20 @@ class _SignInScreenState extends State<SignInScreen> {
             validator: (value) => _validateInput(value, "Password"),
           ),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomSwitch(
-                value: switchOn,
-                enableColor: const Color.fromARGB(255, 50, 194, 122),
-                onChanged: (value) {
-                  switchOn = value;
-                  setState(() {});
-                },
-              ),
-              const Text(
-                "Remember Me",
-                style: TextStyle(
+          SizedBox(
+            width: screenSize.width,
+            child: RichText(
+              textAlign: TextAlign.right,
+              text: TextSpan(
+                text: "Forgot Password?",
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black45,
+                  color: Color.fromARGB(255, 50, 194, 122),
                 ),
+                recognizer: TapGestureRecognizer()..onTap = () {},
               ),
-              SizedBox(width: screenSize.width * 0.1),
-              RichText(
-                text: TextSpan(
-                  text: "Forgot Password?",
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromARGB(255, 50, 194, 122),
-                  ),
-                  recognizer: TapGestureRecognizer()..onTap = () {},
-                ),
-              ),
-            ],
+            ),
           ),
           const SizedBox(height: 20),
           utilManager.customTextButton(
@@ -208,11 +190,10 @@ class _SignInScreenState extends State<SignInScreen> {
                 _formKey.currentState!.save();
                 try {
                   EasyLoading.show(status: "Signing in...");
-                  UserCredential user = await _auth
-                      .signInWithEmailAndPassword(
-                        email: emailController.text,
-                        password: passwordController.text,
-                      );
+                  UserCredential user = await _auth.signInWithEmailAndPassword(
+                    email: emailController.text,
+                    password: passwordController.text,
+                  );
                   EasyLoading.dismiss();
                   if (user.user != null) {
                     EasyLoading.showSuccess('Signed in');
@@ -233,8 +214,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   } else if (error.code == 'user-not-found') {
                     EasyLoading.showError('No user with this email!');
                   } else if (error.code == 'INVALID_LOGIN_CREDENTIALS') {
-                    EasyLoading.showError('Please, input correct credentials or Sign Up');
-                  } else{
+                    EasyLoading.showError(
+                        'Please, input correct credentials or Sign Up');
+                  } else {
                     EasyLoading.showError(error.code.toString());
                   }
                 } catch (e) {
@@ -316,7 +298,8 @@ class _SignInScreenState extends State<SignInScreen> {
                 EasyLoading.show(status: "Signing in...");
                 await signInWithGoogle();
                 EasyLoading.dismiss();
-                if(context.mounted) GoToPageProvider().goToPage(context, page: const AuthPage());
+                if (context.mounted)
+                  GoToPageProvider().goToPage(context, page: const AuthPage());
               } catch (e) {
                 EasyLoading.showError(e.toString());
               }

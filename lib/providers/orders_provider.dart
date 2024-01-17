@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:maanecommerceui/models/order_model.dart';
 import '../repos/get_orders_repo.dart';
+import '../repos/get_product_repo.dart';
 
 class OrdersProvider extends ChangeNotifier {
   List<OrderModel> orders = [];
@@ -27,10 +29,29 @@ class OrdersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  deleteAllOrders(){
+  deleteAllOrders() {
     deleteAllOrders();
     getOrderData();
     notifyListeners();
+  }
+
+  deleteUserOrders({required String userId}) {
+    for (OrderModel singleOrder in orders) {
+      if (singleOrder.userID == userId) {
+        changeProductStock(
+          productId: singleOrder.productId,
+          productStock: singleOrder.productStock,
+          amount: singleOrder.quantity,
+          addOrRemove: "add",
+        );
+        deleteOrderRepo(orderModel: singleOrder);
+      }
+    }
+
+    Future.delayed(Duration.zero).then((value) {
+      getOrderData();
+      notifyListeners();
+    });
   }
 
   deleteOrder({required OrderModel orderModel}) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maanecommerceui/models/product_model.dart';
 import 'package:maanecommerceui/providers/product_provider.dart';
 import 'package:maanecommerceui/providers/profile_provider.dart';
+import 'package:maanecommerceui/screens/Product/view_product_details.dart';
 import 'package:provider/provider.dart';
 
 class FavouriteScreen extends StatefulWidget {
@@ -45,29 +46,80 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                     itemCount: favouritesList.length,
                     itemBuilder: (context, index) {
                       return Card(
-                        child: ListTile(
-                          title: Row(
-                            children: [
-                              Text(favouritesList[index].productName),
-                              const SizedBox(width: 20),
-                              Text(
-                                '${favouritesList[index].productStock}',
-                                style: const TextStyle(color: Colors.grey),
-                              )
-                            ],
-                          ),
-                          trailing: GestureDetector(
-                            onTap: () async {
-                              setState(() {
-                                profile.changeFavourite(
-                                    productID: favouritesList[index].productId);
-                              });
-                            },
-                            child: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
+                        color: const Color.fromARGB(255, 50, 194, 122),
+                        child: Stack(
+                          children: [
+                            ListTile(
+                              onTap: () {
+                                Future.delayed(Duration.zero, () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ViewProductDetails(
+                                        product: favouritesList[index],
+                                      ),
+                                    ),
+                                  );
+                                });
+                              },
+                              title: SizedBox(
+                                height: 40,
+                                child: Text(
+                                  favouritesList[index].productName,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              subtitle: Row(
+                                children: [
+                                  const Text(
+                                    'Product On Stock: ',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${favouritesList[index].productStock}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                            Positioned(
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () async {
+                                  profile.changeFavourite(
+                                    productID: favouritesList[index].productId,
+                                  );
+                                },
+                                child: Container(
+                                  width: 80,
+                                  height: 82,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.horizontal(
+                                      right: Radius.circular(10),
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                    size: 32,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },

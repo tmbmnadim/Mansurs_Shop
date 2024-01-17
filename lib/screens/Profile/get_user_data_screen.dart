@@ -40,6 +40,8 @@ class _UserDetailsInputState extends State<UserDetailsInput> {
   @override
   void initState() {
     super.initState();
+    print(
+        "------------\n${(Provider.of<ProfileProvider>(context, listen: false).firstLoad)}\n------------");
     if (!(Provider.of<ProfileProvider>(context, listen: false).firstLoad)) {
       UserModel user =
           Provider.of<ProfileProvider>(context, listen: false).user;
@@ -57,8 +59,7 @@ class _UserDetailsInputState extends State<UserDetailsInput> {
       areaController.text = user.area ?? "";
       homeOrOfficeVar = user.homeOrOffice ?? "";
     } else {
-      Provider.of<ProfileProvider>(context, listen: false).firstLoad =
-          false;
+      Provider.of<ProfileProvider>(context, listen: false).firstLoad = false;
       fullNameController.text = widget.fullName ?? "";
       emailController.text = _user?.email ?? "";
     }
@@ -286,56 +287,71 @@ class _UserDetailsInputState extends State<UserDetailsInput> {
               borderRadius: 80,
               onTap: _user != null
                   ? () async {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  try {
-                    String downloadUrl = "";
-                    if (selectedImageFile != null) {
-                      Reference storage = FirebaseStorage.instance.ref();
-                      var snapshot = await storage
-                          .child("Profile Pictures/${_user!.uid}")
-                          .putFile(selectedImageFile!);
-                      downloadUrl = await snapshot.ref.getDownloadURL();
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        try {
+                          String downloadUrl = "";
+                          if (selectedImageFile != null) {
+                            EasyLoading.show(status: "Uploading Image...");
+                            Reference storage = FirebaseStorage.instance.ref();
+                            var snapshot = await storage
+                                .child("Profile Pictures/${_user!.uid}")
+                                .putFile(selectedImageFile!);
+                            downloadUrl = await snapshot.ref.getDownloadURL();
+                          }
+                          EasyLoading.showSuccess('Signed up');
+                          UserModel data = UserModel(
+                            image: downloadUrl.isEmpty
+                                ? (networkImage ?? "")
+                                : downloadUrl,
+                            fullName: fullNameController.text,
+                            email: emailController.text,
+                            userStat: context.mounted
+                                ? Provider.of<ProfileProvider>(context,
+                                                listen: false)
+                                            .user
+                                            .userStat ==
+                                        'admin'
+                                    ? 'admin'
+                                    : 'General'
+                                : "General",
+                            address: addressController.text,
+                            favouritesList: context.mounted
+                                ? Provider.of<ProfileProvider>(context,
+                                        listen: false)
+                                    .user
+                                    .favouritesList
+                                : null,
+                            mobileNumber:
+                                ("$selectedCode~${mobileNumberController.text}"),
+                            landMark: landMarkController.text,
+                            province: provinceController.text,
+                            city: cityController.text,
+                            area: areaController.text,
+                            homeOrOffice: homeOrOfficeVar,
+                          );
+                          EasyLoading.show(status: "Uploading...");
+                          postUserData(userModel: data);
+                          if (context.mounted) {
+                            Provider.of<ProfileProvider>(context, listen: false)
+                                .updateUserData();
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SplashScreen(),
+                                ),
+                                ModalRoute.withName('/'));
+                          }
+                        } catch (e) {
+                          EasyLoading.showError(e.toString());
+                        }
+                      }
                     }
-                    EasyLoading.showSuccess('Signed up');
-                    UserModel data = UserModel(
-                      image: downloadUrl.isEmpty
-                          ? (networkImage ?? "")
-                          : downloadUrl,
-                      fullName: fullNameController.text,
-                      email: emailController.text,
-                      userStat: 'admin',///TODO: Change this to "General"
-                      address: addressController.text,
-                      mobileNumber:
-                      ("$selectedCode~${mobileNumberController.text}"),
-                      landMark: landMarkController.text,
-                      province: provinceController.text,
-                      city: cityController.text,
-                      area: areaController.text,
-                      homeOrOffice: homeOrOfficeVar,
-                    );
-                    EasyLoading.show(status: "Uploading...");
-                    postUserData(userModel: data);
-                    if (context.mounted) {
-                      Provider.of<ProfileProvider>(context, listen: false)
-                          .updateUserData();
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SplashScreen(),
-                          ),
-                          ModalRoute.withName('/'));
-                    }
-                  } catch (e) {
-                    EasyLoading.showError(e.toString());
-                  }
-                }
-              }
                   : () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                }
-              },
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                      }
+                    },
             ),
           )
         ],
