@@ -22,7 +22,9 @@ class _RecoverPasswordState extends State<RecoverPassword> {
       EasyLoading.show(status: "Sending...");
       await _auth.sendPasswordResetEmail(email: emailController.text.trim());
       EasyLoading.dismiss();
-      if(context.mounted) Navigator.pop(context);
+      if(context.mounted) {
+        Navigator.pop(context);
+      }
     } on FirebaseAuthException catch (e) {
       EasyLoading.showError(e.message.toString());
     }

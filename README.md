@@ -1,16 +1,10 @@
-# maanecommerceui
+# Mansurs_Shop
+A single vendor e-commerce app. This was initially UI design homework by Maan Academy. Later I changed the UI a little and added more functionalities. Working on this project taught me a lot about Flutter. And I was able to experiment with new things on this.
 
-An E-Commerce App.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+What was used to make this app:
+1. Firebase Authentication.
+2. Firebase Firestore.
+3. Firebase Storage.
+4. Stripe payment through card.
+5. Provider (State Management).
+6. Comments used to make the project understandable.

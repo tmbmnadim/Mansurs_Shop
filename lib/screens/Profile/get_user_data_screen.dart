@@ -40,8 +40,6 @@ class _UserDetailsInputState extends State<UserDetailsInput> {
   @override
   void initState() {
     super.initState();
-    print(
-        "------------\n${(Provider.of<ProfileProvider>(context, listen: false).firstLoad)}\n------------");
     if (!(Provider.of<ProfileProvider>(context, listen: false).firstLoad)) {
       UserModel user =
           Provider.of<ProfileProvider>(context, listen: false).user;

@@ -64,7 +64,6 @@ class MakePayment {
           "Content-Type": "application/x-www-form-urlencoded"
         },
       );
-      debugPrint("FROM PAYMENT REPO: ${response.body}");
       return jsonDecode(response.body);
     } catch (e) {
       // print("error charging user$e");

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:maanecommerceui/screens/Authentication/auth.dart';
-import 'package:maanecommerceui/custom_widgets/custom_switch.dart';
 import 'package:maanecommerceui/providers/go_to_page.dart';
 import 'package:maanecommerceui/screens/Authentication/sign_up_screen.dart';
 import 'package:maanecommerceui/screens/Start%20Screens/splash_screen.dart';
@@ -298,8 +297,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 EasyLoading.show(status: "Signing in...");
                 await signInWithGoogle();
                 EasyLoading.dismiss();
-                if (context.mounted)
+                if (context.mounted) {
                   GoToPageProvider().goToPage(context, page: const AuthPage());
+                }
               } catch (e) {
                 EasyLoading.showError(e.toString());
               }
